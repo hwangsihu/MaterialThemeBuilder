@@ -1,6 +1,8 @@
 package dev.rikka.tools.materialthemebuilder;
 
 import org.gradle.api.DefaultTask;
+import org.gradle.api.file.DirectoryProperty;
+import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
 
 import javax.inject.Inject;
@@ -10,36 +12,35 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GenerateJavaTask extends DefaultTask {
+public abstract class GenerateJavaTask extends DefaultTask {
 
     private static final String CLASSNAME = "Harmonization";
 
     private final MaterialThemeBuilderExtension extension;
-    private final File dir;
-    private final File file;
+
+    @OutputDirectory
+    public abstract DirectoryProperty getOutputDir();
 
     @Inject
-    public GenerateJavaTask(MaterialThemeBuilderExtension extension, File dir) {
+    public GenerateJavaTask(MaterialThemeBuilderExtension extension) {
         this.extension = extension;
-        this.dir = dir;
-        this.file = new File(dir, String.format("%s.java",
-                String.join("/", (extension.getPackageName() + "." + CLASSNAME).split("\\."))));
     }
 
     @TaskAction
     public void generate() throws IOException {
+        File dir = getOutputDir().get().getAsFile();
         Util.clearDir(dir);
 
         if (extension.getPackageName() == null) {
             return;
         }
 
+        File file = new File(dir, String.join("/", (extension.getPackageName() + "." + CLASSNAME).split("\\.")) + ".java");
         Util.createFile(file);
 
-        var os = new PrintStream(file);
-        write(os);
-        os.flush();
-        os.close();
+        try (PrintStream os = new PrintStream(file)) {
+            write(os);
+        }
     }
 
     public void write(PrintStream os) {

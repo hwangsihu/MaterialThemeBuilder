@@ -4,6 +4,8 @@ import dev.rikka.tools.materialthemebuilder.generator.ColorStateListGenerator;
 import dev.rikka.tools.materialthemebuilder.generator.ValuesAllGenerator;
 import dev.rikka.tools.materialthemebuilder.generator.ValuesV31Generator;
 import org.gradle.api.DefaultTask;
+import org.gradle.api.file.DirectoryProperty;
+import org.gradle.api.tasks.OutputDirectory;
 import org.gradle.api.tasks.TaskAction;
 
 import javax.inject.Inject;
@@ -12,17 +14,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GenerateResTask extends DefaultTask {
+public abstract class GenerateResTask extends DefaultTask {
 
-    private final File dir;
-    private final ValuesAllGenerator valuesAllGenerator;
-    private final ValuesV31Generator valuesV31Generator;
-    private final List<ColorStateListGenerator> colorStateListGenerators = new ArrayList<>();
+    private final MaterialThemeBuilderExtension extension;
+
+    @OutputDirectory
+    public abstract DirectoryProperty getOutputDir();
 
     @Inject
-    public GenerateResTask(MaterialThemeBuilderExtension extension, File dir) {
-        this.dir = dir;
+    public GenerateResTask(MaterialThemeBuilderExtension extension) {
+        this.extension = extension;
+    }
 
+    @TaskAction
+    public void generate() throws IOException {
+        File dir = getOutputDir().get().getAsFile();
+        Util.clearDir(dir);
+
+        List<ColorStateListGenerator> colorStateListGenerators = new ArrayList<>();
         if (extension.isGenerateTextColors()) {
             for (String textColor : MaterialTheme.TEXT_COLORS) {
                 for (String emphasis : MaterialTheme.TEXT_COLOR_EMPHASIS) {
@@ -35,20 +44,13 @@ public class GenerateResTask extends DefaultTask {
             }
         }
 
-        valuesAllGenerator = new ValuesAllGenerator(new File(dir, "values/values.xml"), extension);
-        valuesV31Generator = new ValuesV31Generator(new File(dir, "values-v31/values.xml"), extension);
-    }
+        var valuesAllGenerator = new ValuesAllGenerator(new File(dir, "values/values.xml"), extension);
+        var valuesV31Generator = new ValuesV31Generator(new File(dir, "values-v31/values.xml"), extension);
 
-    @TaskAction
-    public void generate() throws IOException {
-        Util.clearDir(dir);
-        for (ColorStateListGenerator colorStateListGenerator : colorStateListGenerators) {
-            colorStateListGenerator.generate();
+        for (ColorStateListGenerator g : colorStateListGenerators) {
+            g.generate();
         }
         valuesAllGenerator.generate();
         valuesV31Generator.generate();
     }
-
-
 }
-
