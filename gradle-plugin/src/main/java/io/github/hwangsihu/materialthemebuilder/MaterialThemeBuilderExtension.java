@@ -1,4 +1,4 @@
-package dev.rikka.tools.materialthemebuilder;
+package io.github.hwangsihu.materialthemebuilder;
 
 import com.google.common.base.CaseFormat;
 import org.gradle.api.Action;

@@ -1,6 +1,6 @@
-package dev.rikka.tools.materialthemebuilder.generator;
+package io.github.hwangsihu.materialthemebuilder.generator;
 
-import dev.rikka.tools.materialthemebuilder.Util;
+import io.github.hwangsihu.materialthemebuilder.Util;
 
 import java.io.File;
 import java.io.IOException;

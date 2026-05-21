@@ -1,9 +1,9 @@
-package dev.rikka.tools.materialthemebuilder.generator;
+package io.github.hwangsihu.materialthemebuilder.generator;
 
 import com.google.common.base.CaseFormat;
-import dev.rikka.tools.materialthemebuilder.MaterialTheme;
-import dev.rikka.tools.materialthemebuilder.MaterialThemeBuilderExtension;
-import dev.rikka.tools.materialthemebuilder.Util;
+import io.github.hwangsihu.materialthemebuilder.MaterialTheme;
+import io.github.hwangsihu.materialthemebuilder.MaterialThemeBuilderExtension;
+import io.github.hwangsihu.materialthemebuilder.Util;
 import hct.Hct;
 
 import java.io.File;

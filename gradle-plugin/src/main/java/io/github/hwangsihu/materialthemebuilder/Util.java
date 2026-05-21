@@ -1,4 +1,4 @@
-package dev.rikka.tools.materialthemebuilder;
+package io.github.hwangsihu.materialthemebuilder;
 
 import java.io.File;
 import java.io.IOException;

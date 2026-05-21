@@ -1,4 +1,4 @@
-package dev.rikka.tools.materialthemebuilder.generator;
+package io.github.hwangsihu.materialthemebuilder.generator;
 
 import java.io.File;
 
