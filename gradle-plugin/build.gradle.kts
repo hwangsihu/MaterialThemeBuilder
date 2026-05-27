@@ -9,7 +9,7 @@ dependencies {
     compileOnly(gradleApi())
     compileOnly(libs.android.gradle)
     implementation("com.google.guava:guava:33.6.0-jre")
-    compileOnly("androidx.annotation:annotation:1.8.2")
+    compileOnly("androidx.annotation:annotation:1.10.0")
 }
 
 sourceSets {
